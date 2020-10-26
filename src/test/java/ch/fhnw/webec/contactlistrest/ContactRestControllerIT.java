@@ -1,5 +1,6 @@
 package ch.fhnw.webec.contactlistrest;
 
+import ch.fhnw.webec.contactlistrest.model.Contact;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +26,26 @@ public class ContactRestControllerIT {
         // then
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(result.getBody()).hasSize(30);
+    }
+
+    @Test
+    void shouldReturnSingleContactById() {
+        // when
+        final ResponseEntity<Contact> result = restTemplate.getForEntity("/api/contacts/1", Contact.class);
+
+        // then
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(result.getBody().getFirstName()).isEqualTo("Mabel");
+        assertThat(result.getBody().getLastName()).isEqualTo("Guppy");
+    }
+
+    @Test
+    void shouldReturnNotFound() {
+        // when
+        final ResponseEntity<Contact> result = restTemplate.getForEntity("/api/contacts/1000", Contact.class);
+
+        // then
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
 }
