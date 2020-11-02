@@ -48,4 +48,14 @@ public class ContactRestControllerIT {
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
+    @Test
+    void shouldReturnContactsFilteredByName() {
+        // when
+        final ResponseEntity<List> result = restTemplate.getForEntity("/api/contacts?name=ma", List.class);
+
+        // then
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(result.getBody()).hasSize(3);
+
+    }
 }
